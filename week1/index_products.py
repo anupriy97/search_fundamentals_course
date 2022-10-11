@@ -118,8 +118,10 @@ def index_file(file, index_name):
         if 'productId' not in doc or len(doc['productId']) == 0:
             continue
         #### Step 2.b: Create a valid OpenSearch Doc and bulk index 2000 docs at a time
-        the_doc = {k: v for k, v in doc.items()}
+        the_doc = {}
         the_doc['_index'] = index_name
+        the_doc['_source'] = doc
+        the_doc["_id"] = doc["sku"][0]
         docs.append(the_doc)
 
     for i in range(0, len(docs), 2000):
@@ -137,7 +139,6 @@ def index_file(file, index_name):
 def main(source_dir: str, index_name: str, workers: int):
 
     files = glob.glob(source_dir + "/*.xml")
-    files = files[:5]
     docs_indexed = 0
     start = perf_counter()
     with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as executor:

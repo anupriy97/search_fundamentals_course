@@ -245,7 +245,6 @@
       "name" : {
         "type" : "text",
         "analyzer" : "english"
-        }
       },
       "onSale" : {
         "type" : "boolean"
